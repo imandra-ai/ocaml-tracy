@@ -1,6 +1,8 @@
 
 type span = int
 
+external _tracy_enable : unit -> unit = "ml_tracy_enable"
+external _tracy_enabled : unit -> bool = "ml_tracy_enabled"
 external _tracy_enter :
   file:string -> fun_:string -> line:int -> name:string ->
   span = "ml_tracy_enter"
@@ -17,6 +19,13 @@ let exit = _tracy_exit
 let name_thread = _tracy_name_thread
 let message = _tracy_msg
 let plot = _tracy_plot
+let enable = _tracy_enable
+let enabled = _tracy_enabled
+
+let message_f k =
+  if enabled() then (
+    k (fun fmt -> Format.kasprintf message fmt)
+  )
 
 let[@inline] with_ ~file ~line ?fun_name ~name () f =
   let _sp = enter ~file ~line ?fun_name ~name () in
