@@ -12,5 +12,5 @@
     (include_dirs ./tracy))
   ;(c_names tracy_stubs tracyclient)
   (c_library_flags -lstdc++) ;-Lsrc/client -ltracyclient)
-  (no_dynlink)
+  ;(no_dynlink)
   )
