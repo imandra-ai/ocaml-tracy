@@ -9,6 +9,14 @@ val enter :
   unit -> span
 (** Enter a span *)
 
+val with_ :
+  file:string ->
+  line:int ->
+  ?fun_name:string ->
+  name:string ->
+  unit -> (unit -> 'a) -> 'a
+(** Run function within a span *)
+
 val exit : span -> unit
 (** Must be called on the same thread as {!enter} *)
 

@@ -17,3 +17,9 @@ let exit = _tracy_exit
 let name_thread = _tracy_name_thread
 let message = _tracy_msg
 let plot = _tracy_plot
+
+let[@inline] with_ ~file ~line ?fun_name ~name () f =
+  let _sp = enter ~file ~line ?fun_name ~name () in
+  try let x=f() in exit _sp; x
+  with e ->
+    exit _sp; raise e
