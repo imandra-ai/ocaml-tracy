@@ -1,0 +1,8 @@
+
+; compile client
+(foreign_library
+  (archive_name tracyclient)
+  (language cxx)
+  (include_dirs ../tracy/client/ ../tracy/)
+  (flags -DTRACY_ENABLE=1 -fPIC -std=c++11 -O2)
+  (names TracyClient TracyProfiler TracySysTime TracyDxt1 tracy_rpmalloc))

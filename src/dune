@@ -1,0 +1,15 @@
+
+(library
+  (public_name tracy)
+  (name tracy)
+  (flags :standard -warn-error -a+8 -linkall)
+  (foreign_archives client/tracyclient)
+  ;(library_flags -cclib -ltracyclient -cclib -ltracy_stubs)
+  ; compile our stubs + the client
+  (foreign_stubs
+    (language cxx) (names tracy_stubs)
+    (flags -fPIC -std=c++11 -O2)
+    (include_dirs ./tracy))
+  ;(c_names tracy_stubs tracyclient)
+  (c_library_flags -lstdc++) ;-Lsrc/client -ltracyclient)
+  (no_dynlink))
