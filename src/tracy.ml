@@ -17,6 +17,9 @@ external _tracy_plot : string -> float -> unit = "ml_tracy_plot" [@@noalloc]
 let enter ~file ~line ?(fun_name="<fun>") ~name () : span =
   _tracy_enter ~file ~fun_:fun_name ~line ~name
 
+(* TODO: in enter/tracy_enter,
+   use ___tracy_emit_zone_value/color/text for bonus items *)
+
 let exit = _tracy_exit
 let name_thread = _tracy_name_thread
 let message = _tracy_msg
