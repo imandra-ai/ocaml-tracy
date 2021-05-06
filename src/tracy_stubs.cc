@@ -46,8 +46,9 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
     ___tracy_emit_zone_begin_alloc(srcloc, true);
 
   uint32_t id = ctx.id;
+  uint64_t res = (((uint64_t) id) << 1) | ((uint64_t) ctx.active);
 
-  CAMLreturn (Val_int((int) id));
+  CAMLreturn (Val_int((int) res));
 }
 
 // exit using the value returned by `ml_tracy_enter`
@@ -58,8 +59,11 @@ CAMLprim value ml_tracy_exit(value id) {
     CAMLreturn(Val_unit);
   }
 
-  uint32_t c_id = (uint32_t) Int_val(id);
-  TracyCZoneCtx ctx = { .id =  c_id, .active =  true };
+  uint64_t bundle = Int_val(id);
+  bool c_active = (bundle & 1) != 0; // active is LSB
+  uint32_t c_id = (uint32_t) (bundle >> 1);
+
+  TracyCZoneCtx ctx = { .id =  c_id, .active = c_active, };
 
   ___tracy_emit_zone_end(ctx);
 
