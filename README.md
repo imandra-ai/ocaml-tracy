@@ -22,5 +22,4 @@ of Tracy-client.
 | frames | ❌ |
 | gpu | ❌ |
 
-In some cases the feature might not provide all options. For example
-there is no way of specifying colors for zones yet.
+In some cases the feature might not provide all options.

@@ -19,12 +19,34 @@ val enter :
 *)
 (* TODO: color? *)
 
+val add_text : span -> string -> unit
+(** [add_text span s] annotates the span with text [s]. This can
+    be called several times on the same span. *)
+
+val add_text_f :
+  span ->
+  ((('a, Format.formatter, unit, unit) format4 -> 'a) -> unit) -> unit
+(** Formatted version of {!add_text}.
+
+    Usage: [add_text_f span (fun k -> k "some %s message! (%d/100)" "formatted" 100)].
+*)
+
+val add_value : span -> int64 -> unit
+(** [add_value span v] annotates the span with a numeric value (which should
+    be unsigned). *)
+
+val set_color : span -> int -> unit
+(** [set_color span c] sets the color of the span.
+
+    [c] is an integer that represents a color using a RGB triple
+    as follows: [0xRRGGBB]. *)
+
 val with_ :
   file:string ->
   line:int ->
   ?fun_name:string ->
   name:string ->
-  unit -> (unit -> 'a) -> 'a
+  unit -> (span -> 'a) -> 'a
 (** Run function within a span. See {!enter} for more details about the parameters. *)
 
 val exit : span -> unit

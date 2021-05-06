@@ -14,6 +14,10 @@ external _tracy_msg : string -> unit = "ml_tracy_msg" [@@noalloc]
 external _tracy_plot : string -> float -> unit = "ml_tracy_plot" [@@noalloc]
 (* TODO external _tracy_set_plot_unit : string -> float -> unit = "ml_tracy_plot" *)
 
+external _tracy_span_text : span -> string -> unit = "ml_tracy_span_text" [@@noalloc]
+external _tracy_span_value : span -> int64 -> unit = "ml_tracy_span_value" [@@noalloc]
+external _tracy_span_color : span -> int -> unit = "ml_tracy_span_color" [@@noalloc]
+
 let enter ~file ~line ?(fun_name="<fun>") ~name () : span =
   _tracy_enter ~file ~fun_:fun_name ~line ~name
 
@@ -26,14 +30,22 @@ let message = _tracy_msg
 let plot = _tracy_plot
 let enable = _tracy_enable
 let enabled = _tracy_enabled
+let set_color = _tracy_span_color
+let add_value = _tracy_span_value
+let add_text = _tracy_span_text
 
 let message_f k =
   if enabled() then (
     k (fun fmt -> Format.kasprintf message fmt)
   )
 
+let add_text_f sp k =
+  if enabled() then (
+    k (fun fmt -> Format.kasprintf (add_text sp) fmt)
+  )
+
 let[@inline] with_ ~file ~line ?fun_name ~name () f =
   let _sp = enter ~file ~line ?fun_name ~name () in
-  try let x=f() in exit _sp; x
+  try let x=f _sp in exit _sp; x
   with e ->
     exit _sp; raise e

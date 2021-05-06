@@ -15,6 +15,9 @@ extern "C" {
 // controls if tracy is enabled
 static bool enabled = false;
 
+#define INT_OF_CTX(ctx) ((((uint64_t) ctx.id) << 1) | ((uint64_t) ctx.active))
+#define CTX_OF_INT(i) { .id = ((uint32_t) (i >> 1)), .active = ((i & 1) != 0), }
+
 // return the unique uint32 for this zone
 CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
   CAMLparam4(file, fun, line, name);
@@ -45,30 +48,77 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
   TracyCZoneCtx ctx =
     ___tracy_emit_zone_begin_alloc(srcloc, true);
 
-  uint32_t id = ctx.id;
-  uint64_t res = (((uint64_t) id) << 1) | ((uint64_t) ctx.active);
+  uint64_t res = INT_OF_CTX(ctx);
 
   CAMLreturn (Val_int((int) res));
 }
 
 // exit using the value returned by `ml_tracy_enter`
-CAMLprim value ml_tracy_exit(value id) {
-  CAMLparam1(id);
+CAMLprim value ml_tracy_exit(value span) {
+  CAMLparam1(span);
 
   if (!enabled) {
     CAMLreturn(Val_unit);
   }
 
-  uint64_t bundle = Int_val(id);
-  bool c_active = (bundle & 1) != 0; // active is LSB
-  uint32_t c_id = (uint32_t) (bundle >> 1);
-
-  TracyCZoneCtx ctx = { .id =  c_id, .active = c_active, };
+  uint64_t bundle = Int_val(span);
+  TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
   ___tracy_emit_zone_end(ctx);
 
   CAMLreturn (Val_unit);
+}
 
+CAMLprim value ml_tracy_span_color(value span, value color) {
+  CAMLparam2(span, color);
+
+  if (!enabled) {
+    CAMLreturn(Val_unit);
+  }
+
+  uint64_t bundle = Int_val(span);
+  TracyCZoneCtx ctx = CTX_OF_INT(bundle);
+
+  uint64_t c_color = Int_val(color);
+
+  ___tracy_emit_zone_color(ctx, c_color);
+
+  CAMLreturn (Val_unit);
+}
+
+CAMLprim value ml_tracy_span_value(value span, value v) {
+  CAMLparam2(span, v);
+
+  if (!enabled) {
+    CAMLreturn(Val_unit);
+  }
+
+  uint64_t bundle = Int_val(span);
+  TracyCZoneCtx ctx = CTX_OF_INT(bundle);
+
+  uint64_t c_val = Int64_val(v);
+
+  ___tracy_emit_zone_value(ctx, c_val);
+
+  CAMLreturn (Val_unit);
+}
+
+CAMLprim value ml_tracy_span_text(value span, value txt) {
+  CAMLparam2(span, txt);
+
+  if (!enabled) {
+    CAMLreturn(Val_unit);
+  }
+
+  uint64_t bundle = Int_val(span);
+  TracyCZoneCtx ctx = CTX_OF_INT(bundle);
+
+  char * c_text = String_val(txt);
+  size_t c_text_len = caml_string_length(txt);
+
+  ___tracy_emit_zone_text (ctx, c_text, c_text_len);
+
+  CAMLreturn (Val_unit);
 }
 
 CAMLprim value ml_tracy_enable(value _void) {
