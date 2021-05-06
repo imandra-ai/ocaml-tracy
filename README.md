@@ -23,3 +23,12 @@ of Tracy-client.
 | gpu | ❌ |
 
 In some cases the feature might not provide all options.
+
+
+## Example
+
+The file `examples/prof1.ml` shows basic instrumentation on a program that computes
+the Fibonacci function (yes, not representative) in a loop on 3 threads.
+If Tracy is running and is waiting for a connection (press "connect"),
+running `dune exec ./examples/prof1.exe` should start tracing
+and display something like this: ![tracy screenshot](screen1.png)
