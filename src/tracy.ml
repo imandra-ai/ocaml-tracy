@@ -1,15 +1,17 @@
 
 type span = int
+(* technically, [span] is [(bool,uint32)], but since tracy required 64 bits,
+   it always fits *)
 
-external _tracy_enable : unit -> unit = "ml_tracy_enable"
-external _tracy_enabled : unit -> bool = "ml_tracy_enabled"
+external _tracy_enable : unit -> unit = "ml_tracy_enable" [@@noalloc]
+external _tracy_enabled : unit -> bool = "ml_tracy_enabled" [@@noalloc]
 external _tracy_enter :
   file:string -> fun_:string -> line:int -> name:string ->
-  span = "ml_tracy_enter"
-external _tracy_exit : span -> unit = "ml_tracy_exit"
+  span = "ml_tracy_enter" [@@noalloc]
+external _tracy_exit : span -> unit = "ml_tracy_exit" [@@noalloc]
 external _tracy_name_thread : string -> unit = "ml_tracy_name_thread"
-external _tracy_msg : string -> unit = "ml_tracy_msg"
-external _tracy_plot : string -> float -> unit = "ml_tracy_plot"
+external _tracy_msg : string -> unit = "ml_tracy_msg" [@@noalloc]
+external _tracy_plot : string -> float -> unit = "ml_tracy_plot" [@@noalloc]
 (* TODO external _tracy_set_plot_unit : string -> float -> unit = "ml_tracy_plot" *)
 
 let enter ~file ~line ?(fun_name="<fun>") ~name () : span =

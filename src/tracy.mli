@@ -11,7 +11,13 @@ val enter :
   ?fun_name:string ->
   name:string ->
   unit -> span
-(** Enter a span *)
+(** Enter a span.
+    @param file the filename, typically you can use [__FILE__]
+    @param line the line number in [file], typically you can use [__LINE__]
+    @param fun_name if provided, documents the function in which the call occurs
+    @param name name for the span. This is what appears in Tracy.
+*)
+(* TODO: color? *)
 
 val with_ :
   file:string ->
@@ -19,7 +25,7 @@ val with_ :
   ?fun_name:string ->
   name:string ->
   unit -> (unit -> 'a) -> 'a
-(** Run function within a span *)
+(** Run function within a span. See {!enter} for more details about the parameters. *)
 
 val exit : span -> unit
 (** Must be called on the same thread as {!enter} *)
