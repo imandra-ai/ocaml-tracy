@@ -5,6 +5,8 @@ synopsis:
 maintainer: ["Simon Cruanes"]
 authors: ["Simon Cruanes"]
 license: "BSD-3-Clause"
+homepage: "https://github.com/AestheticIntegration/ocaml-tracy"
+bug-reports: "https://github.com/AestheticIntegration/ocaml-tracy/issues"
 depends: [
   "dune" {>= "2.6"}
 ]

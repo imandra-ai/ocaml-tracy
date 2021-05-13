@@ -2,6 +2,8 @@
 (generate_opam_files true)
 
 (name tracy)
+(homepage "https://github.com/AestheticIntegration/ocaml-tracy")
+(bug_reports "https://github.com/AestheticIntegration/ocaml-tracy/issues")
 
 (package
   (name tracy)
