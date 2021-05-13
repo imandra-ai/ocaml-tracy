@@ -3,4 +3,4 @@
   (name prof1)
   (modes native)
   (flags :standard -warn-error -a+8) ;-linkall)
-  (libraries tracy containers threads.posix))
+  (libraries tracy tracy-client containers threads.posix))
