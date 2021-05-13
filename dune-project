@@ -17,4 +17,7 @@
   (license BSD-3-Clause)
   (maintainers "Simon Cruanes")
   (authors "Bartosz Taudul" "Simon Cruanes")
+  (depends
+    (tracy (= :version))
+  )
   (synopsis "Actual bindings to the Tracy profiler, implements `tracy`"))

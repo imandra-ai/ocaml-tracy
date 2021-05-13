@@ -8,6 +8,7 @@ homepage: "https://github.com/AestheticIntegration/ocaml-tracy"
 bug-reports: "https://github.com/AestheticIntegration/ocaml-tracy/issues"
 depends: [
   "dune" {>= "2.6"}
+  "tracy" {= version}
 ]
 build: [
   ["dune" "subst"] {pinned}
