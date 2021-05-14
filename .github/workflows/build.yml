@@ -16,6 +16,10 @@ jobs:
     - uses: avsm/setup-ocaml@v1
       with:
         ocaml-version: ${{ matrix.ocaml }}
+    - name: Checkout submodules
+      uses: srt32/git-actions@v0.0.3
+      with:
+        args: git submodule update --init --recursive
     - run: opam pin -n .
     - run: opam depext -yt tracy
     - run: opam install tracy -t --deps-only
