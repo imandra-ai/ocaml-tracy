@@ -1,4 +1,4 @@
-# OCaml-tracy
+# OCaml-tracy [![build](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml/badge.svg)](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml)
 
 This repo contains bindings to [Tracy](https://github.com/wolfpld/tracy),
 a profiler and trace visualizer. It's licensed, like Tracy, under
