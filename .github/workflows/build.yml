@@ -1,0 +1,22 @@
+name: build
+on: [push, pull_request]
+
+jobs:
+  run:
+    name: Build
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        ocaml: [ '4.08.0']
+        #os: [macos-latest, ubuntu-latest, windows-latest]
+        #ocaml: [ '4.08.0', '4.11.0' ]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@main
+    - uses: avsm/setup-ocaml@v1
+      with:
+        ocaml-version: ${{ matrix.ocaml }}
+    - run: opam pin -n .
+    - run: opam depext -yt tracy
+    - run: opam install tracy -t --deps-only
+    - run: opam exec -- dune build -p tracy
