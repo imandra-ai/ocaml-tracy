@@ -113,7 +113,7 @@ CAMLprim value ml_tracy_span_text(value span, value txt) {
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
-  char * c_text = String_val(txt);
+  const char * c_text = String_val(txt);
   size_t c_text_len = caml_string_length(txt);
 
   ___tracy_emit_zone_text (ctx, c_text, c_text_len);
