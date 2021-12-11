@@ -2,6 +2,7 @@
 (library
   (public_name tracy-client)
   (name tracy_client)
+  (libraries threads.posix)
   (implements tracy)
   (flags :standard -warn-error -a+8 -linkall)
   (foreign_archives client/tracyclient)
