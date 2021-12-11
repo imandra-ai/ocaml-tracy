@@ -6,21 +6,24 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [ubuntu-latest]
-        ocaml: [ '4.08.0']
-        #os: [macos-latest, ubuntu-latest, windows-latest]
-        #ocaml: [ '4.08.0', '4.11.0' ]
+        os:
+          - ubuntu-latest
+          - windows-latest
+            #- macos-latest
+        ocaml-compiler:
+          - 4.08.x
+          - 4.12.x
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@main
-    - uses: avsm/setup-ocaml@v1
+    - uses: actions/checkout@v2
+    - uses: ocaml/setup-ocaml@v2
       with:
-        ocaml-version: ${{ matrix.ocaml }}
+        ocaml-compiler: ${{ matrix.ocaml-compiler }}
     - name: Checkout submodules
       uses: srt32/git-actions@v0.0.3
       with:
         args: git submodule update --init --recursive
     - run: opam pin -n .
-    - run: opam depext -yt tracy
-    - run: opam install tracy -t --deps-only
-    - run: opam exec -- dune build -p tracy
+    - run: opam depext -yt tracy tracy-client
+    - run: opam install . -t --deps-only
+    - run: opam exec -- dune build @install
