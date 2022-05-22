@@ -1,9 +1,9 @@
 
-#include <caml/mlvalues.h>
 #include <caml/memory.h>
+#include <caml/mlvalues.h>
 
-#include <stdint.h>
 #include <stdbool.h>
+#include <stdint.h>
 
 // needed for macros to do anything
 #define TRACY_ENABLE 1
@@ -15,8 +15,9 @@ extern "C" {
 // controls if tracy is enabled
 static bool enabled = false;
 
-#define INT_OF_CTX(ctx) ((((uint64_t) ctx.id) << 1) | ((uint64_t) ctx.active))
-#define CTX_OF_INT(i) { .id = ((uint32_t) (i >> 1)), .active = ((i & 1) != 0), }
+#define INT_OF_CTX(ctx) ((((uint64_t)ctx.id) << 1) | ((uint64_t)ctx.active))
+#define CTX_OF_INT(i)                                                          \
+  { .id = ((uint32_t)(i >> 1)), .active = ((i & 1) != 0), }
 
 // return the unique uint32 for this zone
 CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
@@ -26,31 +27,27 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
     CAMLreturn(Val_int(0));
   }
 
-  ___tracy_init_thread(); // idempotent
-
   // declare a srcloc
-  uint32_t c_line = (uint32_t) Int_val(line);
+  uint32_t c_line = (uint32_t)Int_val(line);
 
-  char const * c_file = String_val(file);
+  char const *c_file = String_val(file);
   size_t c_file_len = caml_string_length(file);
 
-  char const * c_fun = String_val(fun);
+  char const *c_fun = String_val(fun);
   size_t c_fun_len = caml_string_length(fun);
 
-  char const * c_name = String_val(name);
+  char const *c_name = String_val(name);
   size_t c_name_len = caml_string_length(name);
 
-  uint64_t srcloc =
-    ___tracy_alloc_srcloc_name(c_line, c_file, c_file_len, c_fun,
-      c_fun_len, c_name, c_name_len);
+  uint64_t srcloc = ___tracy_alloc_srcloc_name(
+      c_line, c_file, c_file_len, c_fun, c_fun_len, c_name, c_name_len);
 
   // enter zone
-  TracyCZoneCtx ctx =
-    ___tracy_emit_zone_begin_alloc(srcloc, true);
+  TracyCZoneCtx ctx = ___tracy_emit_zone_begin_alloc(srcloc, true);
 
   uint64_t res = INT_OF_CTX(ctx);
 
-  CAMLreturn (Val_int((int) res));
+  CAMLreturn(Val_int((int)res));
 }
 
 // exit using the value returned by `ml_tracy_enter`
@@ -66,7 +63,7 @@ CAMLprim value ml_tracy_exit(value span) {
 
   ___tracy_emit_zone_end(ctx);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_span_color(value span, value color) {
@@ -83,7 +80,7 @@ CAMLprim value ml_tracy_span_color(value span, value color) {
 
   ___tracy_emit_zone_color(ctx, c_color);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_span_value(value span, value v) {
@@ -100,7 +97,7 @@ CAMLprim value ml_tracy_span_value(value span, value v) {
 
   ___tracy_emit_zone_value(ctx, c_val);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_span_text(value span, value txt) {
@@ -113,23 +110,23 @@ CAMLprim value ml_tracy_span_text(value span, value txt) {
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
-  const char * c_text = String_val(txt);
+  const char *c_text = String_val(txt);
   size_t c_text_len = caml_string_length(txt);
 
-  ___tracy_emit_zone_text (ctx, c_text, c_text_len);
+  ___tracy_emit_zone_text(ctx, c_text, c_text_len);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_enable(value _void) {
   CAMLparam1(_void);
   enabled = true;
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_enabled(value _void) {
   CAMLparam1(_void);
-  CAMLreturn (Val_bool(enabled));
+  CAMLreturn(Val_bool(enabled));
 }
 
 CAMLprim value ml_tracy_name_thread(value name) {
@@ -139,10 +136,10 @@ CAMLprim value ml_tracy_name_thread(value name) {
     CAMLreturn(Val_unit);
   }
 
-  char const * c_name = String_val(name);
+  char const *c_name = String_val(name);
   TracyCSetThreadName(c_name);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_msg(value name) {
@@ -152,12 +149,12 @@ CAMLprim value ml_tracy_msg(value name) {
     CAMLreturn(Val_unit);
   }
 
-  char const * c_name = String_val(name);
+  char const *c_name = String_val(name);
   size_t c_len = caml_string_length(name);
 
   TracyCMessage(c_name, c_len);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
 
 CAMLprim value ml_tracy_plot(value name, value x) {
@@ -167,14 +164,13 @@ CAMLprim value ml_tracy_plot(value name, value x) {
     CAMLreturn(Val_unit);
   }
 
-  char const * c_name = String_val(name);
-  //size_t c_len = caml_string_length(name);
+  char const *c_name = String_val(name);
+  // size_t c_len = caml_string_length(name);
 
   double c_x = Double_val(x);
 
   TracyCPlot(c_name, c_x);
 
-  CAMLreturn (Val_unit);
+  CAMLreturn(Val_unit);
 }
-
 }
