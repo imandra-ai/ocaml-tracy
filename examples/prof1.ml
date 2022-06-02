@@ -31,7 +31,7 @@ let main_loop th_n n =
 
 let () =
   T.enable();
-  let n = 100 in
+  let n = try int_of_string @@ Sys.getenv "N" with _ -> 100 in
   let l = CCList.init 3 (fun i -> Thread.create (main_loop i) n) in
   List.iter Thread.join l;
   T.message "all done";
