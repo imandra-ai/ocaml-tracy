@@ -8,7 +8,7 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - windows-latest
+            #- windows-latest
             #- macos-latest
         ocaml-compiler:
           - 4.08.x
@@ -16,14 +16,15 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v2
+      with:
+        fetch-depth: 1
+        submodules: recursive
     - uses: ocaml/setup-ocaml@v2
       with:
         ocaml-compiler: ${{ matrix.ocaml-compiler }}
-    - name: Checkout submodules
-      uses: srt32/git-actions@v0.0.3
-      with:
-        args: git submodule update --init --recursive
     - run: opam pin -n .
     - run: opam depext -yt tracy tracy-client
     - run: opam install . -t --deps-only
-    - run: opam exec -- dune build @install
+    - run: opam exec -- dune build @install -p tracy,tracy-client
+    - run: opam install containers
+    - run: opam exec -- ./prof1.sh
