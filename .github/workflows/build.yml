@@ -27,4 +27,4 @@ jobs:
     - run: opam install . -t --deps-only
     - run: opam exec -- dune build @install -p tracy,tracy-client
     - run: opam install containers
-    - run: opam exec -- ./prof1.sh
+    - run: N=2 TRACY_NO_INVARIANT_CHECK=1 opam exec -- dune exec ./examples/prof1.exe
