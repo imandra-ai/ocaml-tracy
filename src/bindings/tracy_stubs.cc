@@ -2,6 +2,7 @@
 #include <caml/memory.h>
 #include <caml/mlvalues.h>
 
+#include <cstdint>
 #include <stdbool.h>
 #include <stdint.h>
 
@@ -20,8 +21,8 @@ static bool enabled = false;
   { .id = ((uint32_t)(i >> 1)), .active = ((i & 1) != 0), }
 
 // return the unique uint32 for this zone
-CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
-  CAMLparam4(file, fun, line, name);
+CAMLprim value ml_tracy_enter(value file, value fun, value line, value name, value depth) {
+  CAMLparam5(file, fun, line, name, depth);
 
   if (!enabled) {
     CAMLreturn(Val_int(0));
@@ -42,8 +43,15 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name) {
   uint64_t srcloc = ___tracy_alloc_srcloc_name(
       c_line, c_file, c_file_len, c_fun, c_fun_len, c_name, c_name_len);
 
+  uint32_t c_depth = (uint32_t)Int_val(depth);
+  if (c_depth > 62) c_depth = 62;
+
   // enter zone
-  TracyCZoneCtx ctx = ___tracy_emit_zone_begin_alloc(srcloc, true);
+  TracyCZoneCtx ctx =
+    c_depth > 0
+    ? ___tracy_emit_zone_begin_alloc_callstack(srcloc, c_depth, true)
+    : ___tracy_emit_zone_begin_alloc(srcloc, true)
+    ;
 
   uint64_t res = INT_OF_CTX(ctx);
 
@@ -153,6 +161,21 @@ CAMLprim value ml_tracy_msg(value name) {
   size_t c_len = caml_string_length(name);
 
   TracyCMessage(c_name, c_len);
+
+  CAMLreturn(Val_unit);
+}
+
+CAMLprim value ml_tracy_app_info(value name) {
+  CAMLparam1(name);
+
+  if (!enabled) {
+    CAMLreturn(Val_unit);
+  }
+
+  char const *c_name = String_val(name);
+  size_t c_len = caml_string_length(name);
+
+  TracyCAppInfo(c_name, c_len);
 
   CAMLreturn(Val_unit);
 }

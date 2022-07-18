@@ -6,6 +6,7 @@ val enable : unit -> unit
 val enabled : unit -> bool
 
 val enter :
+  ?cs_depth:int ->
   file:string ->
   line:int ->
   ?fun_name:string ->
@@ -16,8 +17,13 @@ val enter :
     @param line the line number in [file], typically you can use [__LINE__]
     @param fun_name if provided, documents the function in which the call occurs
     @param name name for the span. This is what appears in Tracy.
+    @param cs_depth if provided, depth of call stack to capture. Using this
+    parameter makes the capture slower.
 *)
 (* TODO: color? *)
+
+val set_app_info : string -> unit
+(** Set application information *)
 
 val add_text : span -> string -> unit
 (** [add_text span s] annotates the span with text [s]. This can
@@ -42,6 +48,7 @@ val set_color : span -> int -> unit
     as follows: [0xRRGGBB]. *)
 
 val with_ :
+  ?cs_depth:int ->
   file:string ->
   line:int ->
   ?fun_name:string ->
