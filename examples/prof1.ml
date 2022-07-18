@@ -8,7 +8,7 @@ let rec fib n =
 let main_loop th_n n =
   T.name_thread (Printf.sprintf "thread_%d" th_n);
   for i = 1 to n do
-    let _sp = T.enter ~file:__FILE__ ~line:__LINE__ ~name:"outer" () in
+    let _sp = T.enter ~cs_depth:15 ~file:__FILE__ ~line:__LINE__ ~name:"outer" () in
     T.add_text_f _sp (fun k->k "outer loop %d/%d" i n);
 
     for j = 0 to 10 do
@@ -26,11 +26,13 @@ let main_loop th_n n =
       if j mod 2 = 0 then T.plot "fib" (float fib_res);
     done;
     T.exit _sp;
+    Printf.printf "done with step %d/%d\n%!" i n;
   done
 
 
 let () =
   T.enable();
+  T.set_app_info "prof1: example of application profiled with Tracy";
   let n = try int_of_string @@ Sys.getenv "N" with _ -> 100 in
   let l = CCList.init 3 (fun i -> Thread.create (main_loop i) n) in
   List.iter Thread.join l;
