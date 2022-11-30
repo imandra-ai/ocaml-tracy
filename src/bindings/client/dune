@@ -3,6 +3,6 @@
 (foreign_library
   (archive_name tracyclient)
   (language cxx)
-  (include_dirs ../tracy/client/ ../tracy/)
+  (include_dirs ../tracy/public/tracy/ ../tracy/public)
   (flags -DTRACY_ENABLE=1 -fPIC -std=c++11 -O2)
   (names TracyClient))

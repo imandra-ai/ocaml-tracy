@@ -9,7 +9,7 @@
 // needed for macros to do anything
 #define TRACY_ENABLE 1
 
-#include "tracy/TracyC.h"
+#include "tracy/public/tracy/TracyC.h"
 
 extern "C" {
 
