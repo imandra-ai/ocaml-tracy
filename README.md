@@ -21,6 +21,7 @@ of Tracy-client.
 | screenshots | ❌ |
 | frames | ❌ |
 | gpu | ❌ |
+| fibers | ❌ |
 
 In some cases the feature might not provide all options.
 
@@ -48,9 +49,9 @@ and display something like this: ![tracy screenshot](screen1.png)
 
   ```ocaml
   T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner.fib" () @@ fun _sp ->
-    T.set_color _sp 0xaa000f;
-    (* rest of code in the span _sp *)
-    …
+  T.set_color _sp 0xaa000f;
+  (* rest of code in the span _sp *)
+  …
   ```
 
   to create a _span_ in Tracy, with a custom color, and the name `inner.fib`.
@@ -59,6 +60,34 @@ and display something like this: ![tracy screenshot](screen1.png)
   the span manually.
 
   To start, one needs to call `Tracy.enable()`.
+
+  A pretty convenient helper for OCaml 4.08 and later, is to define:
+
+  ```ocaml
+  let (let@) = (@@)
+  ```
+
+  to then be able to write spans this way:
+
+  ```ocaml
+  let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner.fib" () in
+  T.set_color _sp 0xaa000f;
+  (* rest of code in the span _sp *)
+  …
+  ```
+
+  For example, in a nested loop:
+
+  ```ocaml
+  let run n =
+    for i=0 to n do
+      let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"outer-loop" () in
+      for j=0 to n do
+        let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner-loop" () in
+        (* do actual computation here with [i] and [j] *)
+      done
+    done
+  ```
 
 - the `tracy-client` package contains the actual C bindings (using a vendored
   copy of tracy), and _implements_ the virtual library by providing actual
