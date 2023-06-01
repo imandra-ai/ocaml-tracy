@@ -19,12 +19,10 @@ dune-release-distrib:
 	dune-release publish -p tracy,tracy-client -t v$(VERSION) -V $(VERSION)
 	echo "publishing done"
 
-dune-release-publish:
+dune-release-opam-publish:
+	@[ -n "$(VERSION)" ] || (echo "make sure to pass VERSION " && exit 1)
 	@echo "make sure you ran `make dune-release-distrib` first"
-	dune-release opam pkg
-	dune-release opam submit
-	
+	dune-release opam pkg -t v$(VERSION) -V $(VERSION)
+	dune-release opam submit -t v$(VERSION) -V $(VERSION)
 
-
-
-.PHONY: clean watch dune-release-distrib dune-release-publish
+.PHONY: clean watch dune-release-distrib dune-release-opam-publish
