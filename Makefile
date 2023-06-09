@@ -5,7 +5,7 @@ all:
 clean:
 	@dune clean
 
-WATCH?="@install @runtest"
+WATCH?= @install @runtest
 watch:
 	@dune build $(WATCH) -w
 
