@@ -23,8 +23,8 @@ jobs:
       with:
         ocaml-compiler: ${{ matrix.ocaml-compiler }}
     - run: opam pin -n .
-    - run: opam depext -yt tracy tracy-client
+    - run: opam depext -yt tracy-client
     - run: opam install . -t --deps-only
-    - run: opam exec -- dune build @install -p tracy,tracy-client
+    - run: opam exec -- dune build @install -p tracy-client
     - run: opam install containers
     - run: N=2 TRACY_NO_INVARIANT_CHECK=1 opam exec -- dune exec ./examples/prof1.exe
