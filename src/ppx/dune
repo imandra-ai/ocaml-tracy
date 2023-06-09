@@ -1,0 +1,7 @@
+
+(library
+  (public_name tracy-ppx)
+  (name tracy_ppx)
+  (preprocess (pps ppxlib.metaquot))
+  (libraries ppxlib)
+  (kind ppx_rewriter))

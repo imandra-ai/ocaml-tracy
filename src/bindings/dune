@@ -2,6 +2,7 @@
 (library
   (public_name tracy-client)
   (name tracy_client)
+  (instrumentation.backend (ppx tracy-ppx))
   (synopsis "Bindings to Tracy client library. This communicates with Tracy.")
   (libraries threads.posix)
   (implements tracy)
