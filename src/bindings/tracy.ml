@@ -20,9 +20,9 @@ external _tracy_span_text : span -> string -> unit = "ml_tracy_span_text" [@@noa
 external _tracy_span_value : span -> int64 -> unit = "ml_tracy_span_value" [@@noalloc]
 external _tracy_span_color : span -> int -> unit = "ml_tracy_span_color" [@@noalloc]
 
-let enter ?cs_depth ~file ~line ?(fun_name="<fun>") ~name () : span =
+let enter ?cs_depth ~__FILE__:file ~__LINE__:line ?(__FUNCTION__="<fun>") name : span =
   let depth = match cs_depth with None -> 0 | Some i -> i in
-  _tracy_enter ~file ~fun_:fun_name ~line ~name ~depth
+  _tracy_enter ~file ~fun_:__FUNCTION__ ~line ~name ~depth
 
 (* TODO: in enter/tracy_enter,
    use ___tracy_emit_zone_value/color/text for bonus items *)
@@ -49,8 +49,8 @@ let add_text_f sp k =
     k (fun fmt -> Format.kasprintf (add_text sp) fmt)
   )
 
-let[@inline] with_ ?cs_depth ~file ~line ?fun_name ~name () f =
-  let _sp = enter ?cs_depth ~file ~line ?fun_name ~name () in
+let[@inline] with_ ?cs_depth ~__FILE__ ~__LINE__ ?__FUNCTION__ name f =
+  let _sp = enter ?cs_depth ~__FILE__ ~__LINE__ ?__FUNCTION__ name in
   try let x=f _sp in exit _sp; x
   with e ->
     exit _sp; raise e

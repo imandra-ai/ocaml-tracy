@@ -1,7 +1,7 @@
 
 type span = unit
 
-let enter ?cs_depth:_ ~file:_ ~line:_ ?fun_name:_ ~name:_ () : span = ()
+let enter ?cs_depth:_ ~__FILE__:_ ~__LINE__:_ ?__FUNCTION__:_ _name : span = ()
 
 let exit _ = ()
 let name_thread _ = ()
@@ -17,4 +17,4 @@ let set_app_info _ = ()
 let message_f _ = ()
 let add_text_f _ _ = ()
 
-let[@inline] with_ ?cs_depth:_ ~file:_ ~line:_ ?fun_name:_ ~name:_ () f = f()
+let[@inline] with_ ?cs_depth:_ ~__FILE__:_ ~__LINE__:_ ?__FUNCTION__:_ _name f = f()

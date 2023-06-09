@@ -7,18 +7,18 @@ val enabled : unit -> bool
 
 val enter :
   ?cs_depth:int ->
-  file:string ->
-  line:int ->
-  ?fun_name:string ->
-  name:string ->
-  unit -> span
-(** Enter a span.
-    @param file the filename, typically you can use [__FILE__]
-    @param line the line number in [file], typically you can use [__LINE__]
-    @param fun_name if provided, documents the function in which the call occurs
-    @param name name for the span. This is what appears in Tracy.
+  __FILE__:string ->
+  __LINE__:int ->
+  ?__FUNCTION__:string ->
+  string -> span
+(** [enter ~__FILE__ ~__LINE__ name] enters a span.
+    @param __FILE__ the filename, typically you can use [__FILE__]
+    @param __LINE__ the line number in [file], typically you can use [__LINE__]
+    @param __FUNCTION__ if provided, documents the function in which the call occurs
+      (typically you can use [__FUNCTION__])
+    @param name name for the span. This is what appears in Tracy on the span.
     @param cs_depth if provided, depth of call stack to capture. Using this
-    parameter makes the capture slower.
+    parameter makes the capture slower but captures a stack trace.
 *)
 (* TODO: color? *)
 
@@ -49,12 +49,13 @@ val set_color : span -> int -> unit
 
 val with_ :
   ?cs_depth:int ->
-  file:string ->
-  line:int ->
-  ?fun_name:string ->
-  name:string ->
-  unit -> (span -> 'a) -> 'a
+  __FILE__:string ->
+  __LINE__:int ->
+  ?__FUNCTION__:string ->
+  string ->
+  (span -> 'a) -> 'a
 (** Run function within a span. See {!enter} for more details about the parameters. *)
+
 
 val exit : span -> unit
 (** Must be called on the same thread as {!enter} *)

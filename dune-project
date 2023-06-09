@@ -25,3 +25,15 @@
     (tracy (= :version))
   )
   (synopsis "Actual bindings to the Tracy profiler (v0.9.1), implements `tracy`"))
+
+(package
+  (name tracy-ppx)
+  (license BSD-3-Clause)
+  (maintainers "Simon Cruanes")
+  (authors "Simon Cruanes")
+  (depends
+    (ocaml (>= 4.08))
+    (tracy-client (= :version))
+    ppxlib
+  )
+  (synopsis "Instrumentation backend for `tracy-client`"))
