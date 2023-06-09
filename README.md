@@ -98,3 +98,18 @@ and display something like this: ![tracy screenshot](screen1.png)
   implementation and it means that just adding `tracy` to a library will
   not incur much at compile time and runtime.
 
+## Instrumentation
+
+Using dune and `tracy-ppx`, it should be possible to pick instrumentation at build time.
+In your library, add `(instrumentation (backend tracy-client))`.
+
+Then build with:
+
+```
+$ dune build --instrument-with tracy-client path/to/your_binary.exe
+```
+
+and it will automatically enable tracy-client.
+
+**TODO**: there is currently no way to conditionally add spans
+in the instrumentation.
