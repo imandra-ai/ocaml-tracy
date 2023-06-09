@@ -23,10 +23,7 @@ module C () : Trace.Collector.S = struct
     Int64.of_int sp
 
   let exit_span (sp : span) : unit = Tracy_client.exit (Int64.to_int sp)
-
-  let message ?__FUNCTION__:_ ~__FILE__:_ ~__LINE__:_ ~data:_ msg : unit =
-    Tracy_client.message msg
-
+  let message ?span:_ ~data:_ msg : unit = Tracy_client.message msg
   let shutdown () = ()
 end
 
