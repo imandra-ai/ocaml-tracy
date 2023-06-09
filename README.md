@@ -35,20 +35,22 @@ and display something like this: ![tracy screenshot](screen1.png)
 
 ## Usage
 
-- the `tracy` library is a [virtual dune library](https://dune.readthedocs.io/en/stable/variants.html)
-  which provides the type signatures for instrumenting your code. It's very
-  small and is ok to add to a library.
+- the `tracy_client` library contains the bindings and can be
+    used directly.
+    The Tracy C++ client is vendored and will be
+    bundled along with the bindings.
 
   For example in `prof1.ml`, we start with:
 
   ```ocaml
+  module T = Tracy_client
   T.name_thread (Printf.sprintf "thread_%d" th_n);
   ```
 
   to name the `n`-th worker thread. Then later we have calls like:
 
   ```ocaml
-  T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner.fib" () @@ fun _sp ->
+  T.with_ ~file:__FILE__ ~line:__LINE__ "inner.fib" @@ fun _sp ->
   T.set_color _sp 0xaa000f;
   (* rest of code in the span _sp *)
   …
@@ -56,10 +58,10 @@ and display something like this: ![tracy screenshot](screen1.png)
 
   to create a _span_ in Tracy, with a custom color, and the name `inner.fib`.
   One can also add text and values to the span.
-  Alternatively, `Tracy.enter` and `Tracy.exit` can be used to delimit
+  Alternatively, `Tracy_client.enter` and `Tracy_client.exit` can be used to delimit
   the span manually.
 
-  To start, one needs to call `Tracy.enable()`.
+  The client automatically tries to connect to Tracy on startup.
 
   A pretty convenient helper for OCaml 4.08 and later, is to define:
 
@@ -70,7 +72,7 @@ and display something like this: ![tracy screenshot](screen1.png)
   to then be able to write spans this way:
 
   ```ocaml
-  let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner.fib" () in
+  let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ "inner.fib" in
   T.set_color _sp 0xaa000f;
   (* rest of code in the span _sp *)
   …
@@ -81,22 +83,20 @@ and display something like this: ![tracy screenshot](screen1.png)
   ```ocaml
   let run n =
     for i=0 to n do
-      let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"outer-loop" () in
+      let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ "outer-loop" in
       for j=0 to n do
-        let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ ~name:"inner-loop" () in
+        let@ _sp = T.with_ ~file:__FILE__ ~line:__LINE__ "inner-loop" in
         (* do actual computation here with [i] and [j] *)
       done
     done
   ```
 
-- the `tracy-client` package contains the actual C bindings (using a vendored
-  copy of tracy), and _implements_ the virtual library by providing actual
-  instrumentation.
+- The library `tracy-client.trace` turns `tracy-client` into a collector
+  for [trace](https://github.com/c-cube/trace), which is a generic tracing
+  library.
 
-- the `tracy.none` library (comes in `tracy`) replaces all instrumentation
-  calls with no-op, which might be inlined by ocamlopt. This is the default
-  implementation and it means that just adding `tracy` to a library will
-  not incur much at compile time and runtime.
+  In that case, `Tracy_client_trace.setup()` needs to be called at the beginning
+  of the program.
 
 ## Instrumentation
 
