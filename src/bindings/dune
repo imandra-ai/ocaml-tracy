@@ -4,7 +4,7 @@
   (name tracy_client)
   (instrumentation.backend (ppx tracy-ppx))
   (synopsis "Bindings to Tracy client library. This communicates with Tracy.")
-  (libraries threads.posix)
+  (libraries threads.posix tracy)
   (implements tracy)
   (flags :standard -warn-error -a+8 -linkall)
   (foreign_archives client/tracyclient)

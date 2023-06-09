@@ -4,4 +4,5 @@
   (name tracy_ppx)
   (preprocess (pps ppxlib.metaquot))
   (libraries ppxlib)
+  (ppx_runtime_libraries tracy tracy-client)
   (kind ppx_rewriter))
