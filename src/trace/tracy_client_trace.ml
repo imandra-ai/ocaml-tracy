@@ -10,10 +10,10 @@ module C () : Trace.Collector.S = struct
     let k, v = d in
     let msg =
       match v with
-      | `String s -> spf "%s:%s" k s
-      | `Int i -> spf "%s:%d" k i
-      | `Bool b -> spf "%s:%b" k b
-      | `None -> k
+      | `String s -> spf "%s: %s\n" k s
+      | `Int i -> spf "%s: %d\n" k i
+      | `Bool b -> spf "%s: %b\n" k b
+      | `None -> spf "%s\n" k
     in
     Tracy_client.add_text sp msg
 
