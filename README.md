@@ -63,7 +63,7 @@ and display something like this: ![tracy screenshot](screen1.png)
 
   The client automatically tries to connect to Tracy on startup.
 
-  A pretty convenient helper for OCaml 4.08 and later, is to define:
+  A pretty convenient helper is:
 
   ```ocaml
   let (let@) = (@@)
