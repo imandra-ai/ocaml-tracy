@@ -13,9 +13,6 @@
 
 extern "C" {
 
-// controls if tracy is enabled
-static bool enabled = false;
-
 #define INT_OF_CTX(ctx) ((((uint64_t)ctx.id) << 1) | ((uint64_t)ctx.active))
 #define CTX_OF_INT(i)                                                          \
   { .id = ((uint32_t)(i >> 1)), .active = ((i & 1) != 0), }
@@ -23,10 +20,6 @@ static bool enabled = false;
 // return the unique uint32 for this zone
 CAMLprim value ml_tracy_enter(value file, value fun, value line, value name, value depth) {
   CAMLparam5(file, fun, line, name, depth);
-
-  if (!enabled) {
-    CAMLreturn(Val_int(0));
-  }
 
   // declare a srcloc
   uint32_t c_line = (uint32_t)Int_val(line);
@@ -62,10 +55,6 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name, val
 CAMLprim value ml_tracy_exit(value span) {
   CAMLparam1(span);
 
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
-
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
@@ -76,10 +65,6 @@ CAMLprim value ml_tracy_exit(value span) {
 
 CAMLprim value ml_tracy_span_color(value span, value color) {
   CAMLparam2(span, color);
-
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
 
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
@@ -94,10 +79,6 @@ CAMLprim value ml_tracy_span_color(value span, value color) {
 CAMLprim value ml_tracy_span_value(value span, value v) {
   CAMLparam2(span, v);
 
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
-
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
@@ -111,10 +92,6 @@ CAMLprim value ml_tracy_span_value(value span, value v) {
 CAMLprim value ml_tracy_span_text(value span, value txt) {
   CAMLparam2(span, txt);
 
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
-
   uint64_t bundle = Int_val(span);
   TracyCZoneCtx ctx = CTX_OF_INT(bundle);
 
@@ -126,23 +103,8 @@ CAMLprim value ml_tracy_span_text(value span, value txt) {
   CAMLreturn(Val_unit);
 }
 
-CAMLprim value ml_tracy_enable(value _void) {
-  CAMLparam1(_void);
-  enabled = true;
-  CAMLreturn(Val_unit);
-}
-
-CAMLprim value ml_tracy_enabled(value _void) {
-  CAMLparam1(_void);
-  CAMLreturn(Val_bool(enabled));
-}
-
 CAMLprim value ml_tracy_name_thread(value name) {
   CAMLparam1(name);
-
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
 
   char const *c_name = String_val(name);
   TracyCSetThreadName(c_name);
@@ -152,10 +114,6 @@ CAMLprim value ml_tracy_name_thread(value name) {
 
 CAMLprim value ml_tracy_msg(value name) {
   CAMLparam1(name);
-
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
 
   char const *c_name = String_val(name);
   size_t c_len = caml_string_length(name);
@@ -168,10 +126,6 @@ CAMLprim value ml_tracy_msg(value name) {
 CAMLprim value ml_tracy_app_info(value name) {
   CAMLparam1(name);
 
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
-
   char const *c_name = String_val(name);
   size_t c_len = caml_string_length(name);
 
@@ -182,10 +136,6 @@ CAMLprim value ml_tracy_app_info(value name) {
 
 CAMLprim value ml_tracy_plot(value name, value x) {
   CAMLparam2(name, x);
-
-  if (!enabled) {
-    CAMLreturn(Val_unit);
-  }
 
   char const *c_name = String_val(name);
   // size_t c_len = caml_string_length(name);

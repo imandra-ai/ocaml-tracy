@@ -1,6 +1,0 @@
-
-(library
-  (name tracy_none)
-  (public_name tracy.none)
-  (implements tracy)
-  (synopsis "Empty implementation of the Tracy interface"))

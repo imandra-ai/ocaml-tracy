@@ -1,8 +1,0 @@
-
-(library
-  (public_name tracy)
-  (name tracy)
-  (synopsis "Instrumentation interface for Tracy.")
-  (virtual_modules tracy) ; several implems
-  (default_implementation tracy_none)
-  (flags :standard -warn-error -a+8 -linkall))
