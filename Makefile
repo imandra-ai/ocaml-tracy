@@ -5,8 +5,9 @@ all:
 clean:
 	@dune clean
 
+WATCH?="@install @runtest"
 watch:
-	@dune build @install -w
+	@dune build $(WATCH) -w
 
 VERSION?=
 dune-release-distrib:
