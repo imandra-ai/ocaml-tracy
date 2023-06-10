@@ -15,9 +15,9 @@ dune-release-distrib:
 	@echo "using version $(VERSION)"
 	@git tag -d v$(VERSION) || true
 	dune-release tag -f v$(VERSION)
-	dune-release distrib -p tracy,tracy-client --include-submodules -t v$(VERSION) -V $(VERSION)
+	dune-release distrib -p tracy-client --include-submodules -t v$(VERSION) -V $(VERSION)
 	echo "distrib done, publishing"
-	dune-release publish -p tracy,tracy-client -t v$(VERSION) -V $(VERSION)
+	dune-release publish -p tracy-client -t v$(VERSION) -V $(VERSION)
 	echo "publishing done"
 
 dune-release-opam-publish:
