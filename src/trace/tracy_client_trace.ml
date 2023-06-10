@@ -24,6 +24,8 @@ module C () : Trace.Collector.S = struct
 
   let exit_span (sp : span) : unit = Tracy_client.exit (Int64.to_int sp)
   let message ?span:_ ~data:_ msg : unit = Tracy_client.message msg
+  let counter_float name n : unit = Tracy_client.plot name n
+  let counter_int name n : unit = counter_float name (float_of_int n)
   let shutdown () = ()
 end
 
