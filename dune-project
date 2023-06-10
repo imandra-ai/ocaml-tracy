@@ -16,15 +16,3 @@
     (ocaml (>= 4.08))
     trace)
   (synopsis "Client bindings to the Tracy profiler (v0.9.1)"))
-
-(package
-  (name tracy-ppx)
-  (license BSD-3-Clause)
-  (maintainers "Simon Cruanes")
-  (authors "Simon Cruanes")
-  (depends
-    (ocaml (>= 4.08))
-    (tracy-client (= :version))
-    ppxlib
-  )
-  (synopsis "Instrumentation backend for `tracy-client`"))
