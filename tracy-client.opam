@@ -28,3 +28,6 @@ build: [
   ]
 ]
 dev-repo: "git+https://github.com/imandra-ai/ocaml-tracy.git"
+depexts: [
+ ["linux-headers"] {os-distribution = "alpine"}
+]
