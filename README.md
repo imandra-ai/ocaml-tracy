@@ -1,4 +1,4 @@
-# OCaml-tracy [![build](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml/badge.svg)](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml)
+# OCaml Tracy-client [![build](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml/badge.svg)](https://github.com/AestheticIntegration/ocaml-tracy/actions/workflows/build.yml)
 
 This repo contains bindings to [Tracy](https://github.com/wolfpld/tracy),
 a profiler and trace visualizer. It's licensed, like Tracy, under
@@ -36,7 +36,7 @@ and display something like this: ![tracy screenshot](screen1.png)
 ## Usage
 
 - the `tracy_client` library contains the bindings and can be
-    used directly.
+    used directly in OCaml programs.
     The Tracy C++ client is vendored and will be
     bundled along with the bindings.
 
