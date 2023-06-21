@@ -1,2 +1,2 @@
 
-(vendored_dirs tracy)
+(data_only_dirs tracy)

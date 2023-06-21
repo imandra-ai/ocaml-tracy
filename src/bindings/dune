@@ -17,3 +17,10 @@
   (c_library_flags -lstdc++) ;-Lsrc/client -ltracyclient)
   ;(no_dynlink)
   )
+
+(rule
+  (targets tracy)
+  (deps (source_tree ../../vendor/tracy/))
+  (action (run ln -s ../../vendor/tracy/ ./tracy/)))
+ ;(action (bash "cp -r ../../vendor/tracy/ ./tracy/")))
+
