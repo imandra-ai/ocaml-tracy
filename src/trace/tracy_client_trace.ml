@@ -1,4 +1,3 @@
-type span = Trace.span
 type explicit_span = Trace.explicit_span
 
 let spf = Printf.sprintf
@@ -18,12 +17,18 @@ module C () : Trace.Collector.S = struct
     in
     Tracy_client.add_text sp msg
 
-  let enter_span ?__FUNCTION__ ~__FILE__ ~__LINE__ ~data name : span =
+  let enter_span ?__FUNCTION__ ~__FILE__ ~__LINE__ ~data name : Trace.span =
     let sp = Tracy_client.enter ?__FUNCTION__ ~__FILE__ ~__LINE__ name in
     if data <> [] then List.iter (process_data sp) data;
     Int64.of_int sp
 
-  let exit_span (sp : span) : unit = Tracy_client.exit (Int64.to_int sp)
+  let exit_span (sp : Trace.span) : unit = Tracy_client.exit (Int64.to_int sp)
+
+  let with_span ~__FUNCTION__ ~__FILE__ ~__LINE__ ~data name f =
+    let sp = enter_span ?__FUNCTION__ ~__FILE__ ~__LINE__ ~data name in
+    let finally () = exit_span sp in
+    Fun.protect ~finally (fun () -> f sp)
+
   let message ?span:_ ~data:_ msg : unit = Tracy_client.message msg
   let counter_float name n : unit = Tracy_client.plot name n
   let counter_int name n : unit = counter_float name (float_of_int n)
