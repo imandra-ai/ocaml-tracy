@@ -34,11 +34,11 @@ module C () : Trace.Collector.S = struct
   let counter_int name n : unit = counter_float name (float_of_int n)
   let shutdown () = ()
 
-  let enter_explicit_span ~surrounding:_ ?__FUNCTION__:_ ~__FILE__:_ ~__LINE__:_
-      ~data:_ _name : explicit_span =
+  let enter_manual_span ~parent:_ ~flavor:_ ~__FUNCTION__:_ ~__FILE__:_
+      ~__LINE__:_ ~data:_ _name : explicit_span =
     Trace.Collector.dummy_explicit_span
 
-  let exit_explicit_span _es : unit = ()
+  let exit_manual_span _es : unit = ()
 end
 
 let collector () : Trace.collector =
