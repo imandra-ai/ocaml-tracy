@@ -92,8 +92,7 @@ and display something like this: ![tracy screenshot](screen1.png)
   ```
 
 - The library `tracy-client.trace` turns `tracy-client` into a collector
-  for [trace](https://github.com/c-cube/trace), which is a generic tracing
-  library.
+  for [trace](https://github.com/c-cube/trace), which is a generic tracing library.
 
   In that case, `Tracy_client_trace.setup()` needs to be called at the beginning
   of the program.
