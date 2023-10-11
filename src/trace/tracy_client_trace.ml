@@ -14,6 +14,7 @@ module C () : Trace.Collector.S = struct
       | `Int i -> spf "%s: %d\n" k i
       | `Bool b -> spf "%s: %b\n" k b
       | `None -> spf "%s\n" k
+      | `Float f -> spf "%f\n" f
     in
     Tracy_client.add_text sp msg
 
@@ -30,9 +31,14 @@ module C () : Trace.Collector.S = struct
     Fun.protect ~finally (fun () -> f sp)
 
   let message ?span:_ ~data:_ msg : unit = Tracy_client.message msg
-  let counter_float name n : unit = Tracy_client.plot name n
-  let counter_int name n : unit = counter_float name (float_of_int n)
+  let counter_float ~data:_ name n : unit = Tracy_client.plot name n
+
+  let counter_int ~data name n : unit =
+    counter_float ~data name (float_of_int n)
+
   let shutdown () = ()
+  let add_data_to_span _ _ = ()
+  let add_data_to_manual_span _ _ = ()
 
   let enter_manual_span ~parent:_ ~flavor:_ ~__FUNCTION__:_ ~__FILE__:_
       ~__LINE__:_ ~data:_ _name : explicit_span =
