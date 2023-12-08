@@ -22,6 +22,8 @@ jobs:
     - uses: ocaml/setup-ocaml@v2
       with:
         ocaml-compiler: ${{ matrix.ocaml-compiler }}
+        dune-cache: true
+        allow-prerelease-opam: true
     - run: opam pin -n .
     - run: opam depext -yt tracy-client
     - run: opam install . -t --deps-only
