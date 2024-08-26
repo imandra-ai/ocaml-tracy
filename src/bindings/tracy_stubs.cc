@@ -37,7 +37,7 @@ CAMLprim value ml_tracy_enter(value file, value fun, value line, value name,
   size_t c_name_len = caml_string_length(name);
 
   uint64_t srcloc = ___tracy_alloc_srcloc_name(
-      c_line, c_file, c_file_len, c_fun, c_fun_len, c_name, c_name_len);
+      c_line, c_file, c_file_len, c_fun, c_fun_len, c_name, c_name_len, 0);
 
   const uint32_t max_stack_depth = 62;
   uint32_t c_depth = (uint32_t)Int_val(depth);
