@@ -14,5 +14,5 @@
   (authors "Bartosz Taudul" "Simon Cruanes")
   (depends
     (ocaml (>= 4.08))
-    (trace (and (>= 0.6) (< 0.7))))
+    (trace (and (>= 0.6) (< 0.8))))
   (synopsis "Client bindings to the Tracy profiler (v0.10)"))
