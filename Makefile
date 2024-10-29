@@ -9,6 +9,9 @@ WATCH?= @install @runtest
 watch:
 	@dune build $(WATCH) -w
 
+format:
+	@dune build @fmt --auto-promote
+
 VERSION?=
 dune-release-distrib:
 	@[ -n "$(VERSION)" ] || (echo "make sure to pass VERSION " && exit 1)

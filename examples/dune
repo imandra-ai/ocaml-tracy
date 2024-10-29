@@ -1,6 +1,5 @@
-
 (executable
-  (name prof1)
-  (modes native)
-  (flags :standard -warn-error -a+8) ;-linkall)
-  (libraries tracy-client containers threads.posix))
+ (name prof1)
+ (modes native)
+ (flags :standard -warn-error -a+8) ;-linkall)
+ (libraries tracy-client containers threads.posix))

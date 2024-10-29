@@ -5,7 +5,7 @@ type span = int
 external _tracy_enter :
   file:string -> fun_:string -> line:int -> name:string -> depth:int -> span
   = "ml_tracy_enter"
-  [@@noalloc]
+[@@noalloc]
 
 external _tracy_exit : span -> unit = "ml_tracy_exit" [@@noalloc]
 external _tracy_name_thread : string -> unit = "ml_tracy_name_thread"
@@ -16,13 +16,13 @@ external _tracy_plot : string -> float -> unit = "ml_tracy_plot" [@@noalloc]
 external _tracy_app_info : string -> unit = "ml_tracy_app_info"
 
 external _tracy_span_text : span -> string -> unit = "ml_tracy_span_text"
-  [@@noalloc]
+[@@noalloc]
 
 external _tracy_span_value : span -> int64 -> unit = "ml_tracy_span_value"
-  [@@noalloc]
+[@@noalloc]
 
 external _tracy_span_color : span -> int -> unit = "ml_tracy_span_color"
-  [@@noalloc]
+[@@noalloc]
 
 let enter ?cs_depth ~__FILE__:file ~__LINE__:line ?(__FUNCTION__ = "<fun>") name
     : span =
