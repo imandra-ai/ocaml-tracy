@@ -45,6 +45,7 @@ module C () : Trace.Collector.S = struct
     Trace.Collector.dummy_explicit_span
 
   let exit_manual_span _es : unit = ()
+  let extension_event _ = ()
 end
 
 let collector () : Trace.collector =
