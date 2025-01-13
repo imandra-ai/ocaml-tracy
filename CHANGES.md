@@ -1,4 +1,10 @@
 
+## 0.5.2
+- compat trace 0.9
+
+## 0.5.1
+- relax bounds
+
 ## 0.5
 
 - udpate to tracy 0.11.1

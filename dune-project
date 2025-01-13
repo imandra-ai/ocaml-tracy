@@ -1,6 +1,6 @@
 (lang dune 2.7)
 (generate_opam_files true)
-(version 0.5.1)
+(version 0.5.2)
 
 (name tracy-client)
 (homepage "https://github.com/imandra-ai/ocaml-tracy")
