@@ -19,7 +19,7 @@ jobs:
       with:
         fetch-depth: 1
         submodules: recursive
-    - uses: ocaml/setup-ocaml@v2
+    - uses: ocaml/setup-ocaml@v3
       with:
         ocaml-compiler: ${{ matrix.ocaml-compiler }}
         dune-cache: true
