@@ -1,6 +1,6 @@
 (lang dune 2.7)
 (generate_opam_files true)
-(version 0.5.2)
+(version 0.6)
 
 (name tracy-client)
 (homepage "https://github.com/imandra-ai/ocaml-tracy")
@@ -14,5 +14,5 @@
   (authors "Bartosz Taudul" "Simon Cruanes")
   (depends
     (ocaml (>= 4.08))
-    (trace (and (>= 0.6) (< 0.10))))
-  (synopsis "Client bindings to the Tracy profiler (v0.10)"))
+    (trace (and (>= 0.6) (< 0.11))))
+  (synopsis "Client bindings to the Tracy profiler (v0.12)"))

@@ -1,4 +1,9 @@
 
+## 0.6
+
+- update tracy to v0.12.0
+- compat trace 0.10
+
 ## 0.5.2
 - compat trace 0.9
 
